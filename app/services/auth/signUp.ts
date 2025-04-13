@@ -6,7 +6,7 @@ import {
 import { ServiceResult } from "@/types/index.js";
 import { EncryptionUtils } from "@/utils/encryption.js";
 
-export const signUpService = async (
+export const signUp = async (
   body: AuthEmailPasswordType
 ): Promise<ServiceResult> => {
   const parsed = await AuthEmailPasswordSchema.safeParseAsync(body);

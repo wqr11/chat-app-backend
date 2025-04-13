@@ -21,3 +21,19 @@ export class SetCookiesError extends Error {
     this.message = msg;
   }
 }
+
+export class BadRequestError extends Error {
+  constructor(msg: string) {
+    super();
+    this.name = "Bad Request";
+    this.message = msg;
+  }
+}
+
+export class NotFoundError extends Error {
+  constructor(msg: string) {
+    super();
+    this.name = "Not found";
+    this.message = msg;
+  }
+}

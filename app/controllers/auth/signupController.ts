@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 
-import { signUpService } from "@/services/auth/signUpService.js";
+import { signUp } from "@/services/auth/signUp.js";
 
 export const signUpController = async (req: Request, res: Response) => {
   const body = req.body;
 
-  const data = await signUpService(body);
+  const data = await signUp(body);
 
   res.status(data.code).json({
     ...(data.success

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { loginService } from "@/services/auth/loginService.js";
-import { setTokenCookies } from "@/utils/cookies.js";
+import { login } from "@/services/auth/login.js";
+import { CookiesUtils } from "@/utils/cookies.js";
 
 export const loginController = async (
   req: Request,
@@ -9,10 +9,10 @@ export const loginController = async (
 ) => {
   const body = req.body;
 
-  const result = await loginService(body);
+  const result = await login(body);
 
   if (result.success) {
-    setTokenCookies({
+    CookiesUtils.setTokenCookies({
       res,
       next,
       access: result.data.access,

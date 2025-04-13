@@ -4,7 +4,7 @@ import { AuthRepository } from "@/repository/auth/index.js";
 import { EncryptionUtils } from "@/utils/encryption.js";
 import { JWTUtils } from "@/utils/jwt.js";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/config/index.js";
-import { setTokenCookies } from "@/utils/cookies.js";
+import { CookiesUtils } from "@/utils/cookies.js";
 import { AuthenticationError } from "@/types/errors.js";
 
 export const authMiddleware = async (
@@ -68,7 +68,7 @@ export const authMiddleware = async (
 
       await redis.set(user!.email, newAccessToken);
 
-      setTokenCookies({
+      CookiesUtils.setTokenCookies({
         res,
         next,
         access: newAccessToken,

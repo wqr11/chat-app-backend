@@ -28,10 +28,10 @@ model User {
   middle_name String?
   avatar_url  String?
   role        Role      @default(User)
-  chats       Chat[]
   Message     Message[]
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
+  chats       Chat[]
 
   @@index([id, email])
 }

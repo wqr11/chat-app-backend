@@ -9,7 +9,7 @@ import { LoginServiceResult } from "@/types/index.js";
 import { EncryptionUtils } from "@/utils/encryption.js";
 import { JWTUtils } from "@/utils/jwt.js";
 
-export const loginService = async (
+export const login = async (
   body: AuthEmailPasswordType
 ): Promise<LoginServiceResult> => {
   const parsed = await AuthEmailPasswordSchema.safeParseAsync(body);
