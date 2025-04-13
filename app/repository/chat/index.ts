@@ -58,4 +58,25 @@ export class ChatRepository {
     });
     return chat;
   }
+  static async getChatMessages({
+    chatId,
+    email,
+  }: {
+    chatId: string;
+    email: string;
+  }) {
+    const chats = await prisma.message.findMany({
+      where: {
+        chat: {
+          id: chatId,
+          users: {
+            some: {
+              email,
+            },
+          },
+        },
+      },
+    });
+    return chats;
+  }
 }
