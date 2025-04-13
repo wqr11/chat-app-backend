@@ -1,15 +1,23 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { loginService } from "@/services/auth/loginService.js";
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/config/index.js";
+import { setTokenCookies } from "@/utils/cookies.js";
 
-export const loginController = async (req: Request, res: Response) => {
+export const loginController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const body = req.body;
 
   const result = await loginService(body);
 
   if (result.success) {
-    res.cookie(ACCESS_TOKEN_COOKIE, result.data.access);
-    res.cookie(REFRESH_TOKEN_COOKIE, result.data.refresh);
+    setTokenCookies({
+      res,
+      next,
+      access: result.data.access,
+      refresh: result.data.refresh,
+    });
   }
 
   res.status(result.code).json({
