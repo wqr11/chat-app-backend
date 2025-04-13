@@ -7,7 +7,7 @@
   "scripts": {
     "prepare": "ts-patch install -s",
     "migrate": "prisma migrate dev",
-    "build": "tspc",
+    "build": "tspc && cp ./app/generated ./dist/generated -r",
     "start": "node --env-file=.env ./dist/server.js",
     "dev": "tsx watch --env-file=.env ./app/server.ts"
   },
@@ -17,8 +17,7 @@
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
     "@prisma/client": "6.6.0",
-    "@types/cookie-parser": "^1.4.8",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -26,7 +25,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.14.1",

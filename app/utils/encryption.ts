@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { BCRYPT_SALT_ROUNDS } from "@/config/index.js";
 
 export class EncryptionUtils {

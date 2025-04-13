@@ -34,7 +34,7 @@ export const loginService = async (
     };
   }
 
-  const passwordsAlign = EncryptionUtils.compareHash({
+  const passwordsAlign = await EncryptionUtils.compareHash({
     plain: password,
     encrypted: foundUser.password,
   });
