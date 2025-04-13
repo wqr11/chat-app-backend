@@ -23,7 +23,7 @@ model User {
   id          String    @id @unique @default(cuid())
   email       String    @unique
   password    String
-  name        String
+  name        String?
   last_name   String?
   middle_name String?
   avatar_url  String?
@@ -32,6 +32,8 @@ model User {
   Message     Message[]
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
+
+  @@index([id, email])
 }
 
 model Chat {
@@ -41,6 +43,8 @@ model Chat {
   messages   Message[]
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
+
+  @@index([id])
 }
 
 model Message {
@@ -52,4 +56,6 @@ model Message {
   chat       Chat     @relation(fields: [chatId], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  @@index([chatId])
 }

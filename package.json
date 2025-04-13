@@ -9,21 +9,30 @@
     "migrate": "prisma migrate dev",
     "build": "tspc",
     "start": "node --env-file=.env ./dist/server.js",
-    "serve": "tspc && node --env-file=.env ./dist/server.js"
+    "dev": "tsx watch --env-file=.env ./app/server.ts"
   },
   "keywords": [],
   "author": "WQR!",
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
-    "@prisma/client": "^6.6.0",
-    "express": "^5.1.0"
+    "@prisma/client": "6.6.0",
+    "@types/cookie-parser": "^1.4.8",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "redis": "^4.7.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.14.1",
     "prisma": "^6.6.0",
     "ts-patch": "^3.3.0",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "typescript-transform-paths": "^3.5.5"
   }
