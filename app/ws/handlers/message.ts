@@ -1,19 +1,23 @@
-import { Server, WebSocket } from "ws";
-import { IncomingMessage } from "http";
+import { WebSocket } from "ws";
+import { WsReceivedMessageSchema } from "@/ws/schemas/index.js";
 import { createChat } from "@/ws/services/chat/createChat.js";
 import { createMessage } from "@/ws/services/message/createMessage.js";
-import { WsReceivedMessageSchema } from "@/ws/schemas/index.js";
 import { deleteMessage } from "@/ws/services/message/deleteMessage.js";
-import { WsSentMessage } from "@/ws/types/message.js";
+import { WsBroadcastFunction, WsSentMessage } from "@/ws/types/message.js";
+import { WsConnections } from "@/ws/types/connection.js";
 
 export const wsMessageHandler = async ({
   ws,
   message,
   userId,
+  wsConnections,
+  wsBroadcastMessage,
 }: {
   ws: WebSocket;
   message: WebSocket.RawData;
   userId: string;
+  wsConnections: WsConnections;
+  wsBroadcastMessage: WsBroadcastFunction;
 }) => {
   let json: string;
   try {
@@ -58,6 +62,14 @@ export const wsMessageHandler = async ({
               break;
             }
 
+            const connectionData = wsConnections.get(userId)!;
+            const newConnectionData = {
+              chatIds: [...connectionData.chatIds, createdChat.data.id],
+              ws,
+            };
+
+            wsConnections.set(userId, newConnectionData);
+
             sentMessage = {
               status: "OK",
               event: "CREATE",
@@ -92,7 +104,10 @@ export const wsMessageHandler = async ({
               data: [createdMessage.data],
             };
 
-            wsSendMessage();
+            wsBroadcastMessage({
+              chatId: chat!.id!,
+              message: JSON.stringify(sentMessage),
+            });
             break;
         }
         break;
@@ -118,7 +133,10 @@ export const wsMessageHandler = async ({
               data: [deletedMessage.data],
             };
 
-            wsSendMessage();
+            wsBroadcastMessage({
+              chatId: deletedMessage.data.chatId,
+              message: JSON.stringify(sentMessage),
+            });
             break;
         }
     }

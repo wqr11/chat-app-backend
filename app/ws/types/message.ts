@@ -22,3 +22,11 @@ export type WsSentMessage =
     };
 
 export type WsReceivedMessage = z.infer<typeof WsReceivedMessageSchema>;
+
+export type WsBroadcastFunction = ({
+  chatId,
+  message,
+}: {
+  chatId: string;
+  message: string;
+}) => void;

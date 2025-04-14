@@ -33,6 +33,16 @@ export class MessageRepository {
       where: {
         id: messageId,
       },
+      omit: {
+        authorId: true,
+      },
+      include: {
+        author: {
+          omit: {
+            password: true,
+          },
+        },
+      },
     });
   }
 }

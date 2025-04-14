@@ -1,17 +1,23 @@
-import { prisma } from "@/db/index.js";
-import { WsServiceResult } from "@/ws/types/service.js";
+import { MessageRepository } from "@/repository/message/index.js";
+import { IMessage } from "@/ws/types/db.js";
+
+export type WsDeleteMessageResult =
+  | {
+      success: true;
+      data: IMessage;
+    }
+  | {
+      success: false;
+      error: unknown;
+    };
 
 export const deleteMessage = async ({
   messageId,
 }: {
   messageId: string;
-}): Promise<WsServiceResult> => {
+}): Promise<WsDeleteMessageResult> => {
   try {
-    const deletedMessage = await prisma.message.delete({
-      where: {
-        id: messageId,
-      },
-    });
+    const deletedMessage = await MessageRepository.deleteMessage({ messageId });
     return {
       success: true,
       data: deletedMessage,

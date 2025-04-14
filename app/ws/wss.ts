@@ -1,12 +1,12 @@
-import { Server, WebSocket } from "ws";
+import { WebSocket } from "ws";
 import { IncomingMessage } from "http";
 
 import { wsMessageHandler } from "@/ws/handlers/message.js";
 import { wsAuthentication } from "@/ws/handlers/auth.js";
 import { wsOpenHandler } from "@/ws/handlers/open.js";
-import { WsConnection } from "@/ws/types/connection.js";
+import { WsConnections } from "@/ws/types/connection.js";
 
-const wsConnections: Map<string, WsConnection> = new Map();
+const wsConnections: WsConnections = new Map();
 
 export const wsConnectionHandler = async ({
   ws,
@@ -39,5 +39,11 @@ export const wsConnectionHandler = async ({
     });
   };
 
-  ws.on("message", (message) => wsMessageHandler({ ws, userId, message }));
+  ws.on("message", (message) =>
+    wsMessageHandler({ ws, userId, message, wsConnections, wsBroadcastMessage })
+  );
+
+  ws.on("close", () => {
+    wsConnections.delete(userId);
+  });
 };

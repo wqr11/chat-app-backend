@@ -12,7 +12,11 @@ export class ChatRepository {
         },
       },
       include: {
-        users: true,
+        users: {
+          omit: {
+            password: true,
+          },
+        },
       },
     });
     return chat;
