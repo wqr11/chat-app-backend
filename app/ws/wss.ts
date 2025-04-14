@@ -1,14 +1,30 @@
-import { WebSocket } from "ws";
+import { Server, WebSocket } from "ws";
 import { IncomingMessage } from "http";
 
 import { wsMessageHandler } from "@/ws/handlers/message.js";
-import { wsOpenHandler } from "./handlers/open.js";
+import { wsAuthentication } from "@/ws/handlers/auth.js";
+import { wsOpenHandler } from "@/ws/handlers/open.js";
 
-export const wsConnectionHandler = async (
-  ws: WebSocket,
-  req: IncomingMessage
-) => {
-  ws.on("message", (message) => wsMessageHandler(ws, message, req));
+export const wsConnectionHandler = async ({
+  ws,
+  req,
+  wss,
+}: {
+  ws: WebSocket;
+  req: IncomingMessage;
+  wss: Server<typeof WebSocket, typeof IncomingMessage>;
+}) => {
+  const auth = await wsAuthentication(ws, req);
 
-  await wsOpenHandler(ws, req);
+  if (!auth.success) {
+    return;
+  }
+
+  const { userId } = auth;
+
+  await wsOpenHandler({ ws, userId });
+
+  ws.on("message", (message) =>
+    wsMessageHandler({ ws, userId, message, req, wss })
+  );
 };

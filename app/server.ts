@@ -4,13 +4,11 @@ import { wsConnectionHandler } from "@/ws/wss.js";
 
 import cookieParser from "cookie-parser";
 
-import { loggerMiddleware } from "@/middleware/logger.js";
-import { authMiddleware } from "@/middleware/auth/authMiddleware.js";
-import { errorHandler } from "@/middleware/errorHandler.js";
+import { loggerMiddleware } from "@/http/middleware/logger.js";
+import { authMiddleware } from "@/http/middleware/auth/authMiddleware.js";
+import { errorHandler } from "@/http/middleware/errorHandler.js";
 
-import { authRoutes } from "@/routes/auth.js";
-import { pingRoutes } from "@/routes/ping.js";
-import { chatRoutes } from "@/routes/chat.js";
+import { authRoutes } from "@/http/routes/auth.js";
 import { PORT, WS_PORT } from "@/config/index.js";
 
 const app = express();
@@ -20,7 +18,7 @@ const wss = new WebSocketServer({
   port: WS_PORT,
 });
 
-wss.on("connection", wsConnectionHandler);
+wss.on("connection", (ws, req) => wsConnectionHandler({ ws, req, wss }));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -35,10 +33,6 @@ app.use("/auth", authRoutes);
 
 // secured endpoints
 app.use(authMiddleware);
-
-// chat
-app.use("/chat", chatRoutes);
-app.use("/ping", pingRoutes);
 
 // error handler
 app.use(errorHandler);

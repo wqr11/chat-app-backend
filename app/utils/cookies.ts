@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/config/index.js";
-import { SetCookiesError } from "@/types/errors.js";
+import { SetCookiesError } from "@/http/types/errors.js";
 import { JWTUtils } from "./jwt.js";
 
 export class CookiesUtils {

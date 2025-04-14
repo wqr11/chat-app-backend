@@ -7,7 +7,7 @@ import {
 } from "@/config/index.js";
 
 export class JWTUtils {
-  static signAccessToken(data: { email: string }) {
+  static signAccessToken(data: { userId: string }) {
     const token = jwt.sign(data, JWT_ACCESS_SECRET, {
       expiresIn: JWT_ACCESS_EX,
     }) as string;
@@ -16,12 +16,12 @@ export class JWTUtils {
 
   static verifyAccessToken(token: string) {
     const data = jwt.verify(token, JWT_ACCESS_SECRET) as {
-      email: string;
+      userId: string;
     };
     return data;
   }
 
-  static signRefreshToken(data: { email: string; password: string }) {
+  static signRefreshToken(data: { userId: string; password: string }) {
     const token = jwt.sign(data, JWT_REFRESH_SECRET, {
       expiresIn: JWT_REFRESH_EX,
     }) as string;
@@ -30,7 +30,7 @@ export class JWTUtils {
 
   static verifyRefreshToken(token: string) {
     const data = jwt.verify(token, JWT_REFRESH_SECRET) as {
-      email: string;
+      userId: string;
       password: string;
     };
 

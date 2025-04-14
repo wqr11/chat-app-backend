@@ -2439,7 +2439,7 @@ export namespace Prisma {
 
   export type ChatGroupByOutputType = {
     id: string
-    name: string
+    name: string | null
     created_at: Date
     updated_at: Date
     _count: ChatCountAggregateOutputType | null
@@ -2509,7 +2509,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string
+      name: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["chat"]>
@@ -4702,7 +4702,7 @@ export namespace Prisma {
     OR?: ChatWhereInput[]
     NOT?: ChatWhereInput | ChatWhereInput[]
     id?: StringFilter<"Chat"> | string
-    name?: StringFilter<"Chat"> | string
+    name?: StringNullableFilter<"Chat"> | string | null
     created_at?: DateTimeFilter<"Chat"> | Date | string
     updated_at?: DateTimeFilter<"Chat"> | Date | string
     users?: UserListRelationFilter
@@ -4711,7 +4711,7 @@ export namespace Prisma {
 
   export type ChatOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -4723,7 +4723,7 @@ export namespace Prisma {
     AND?: ChatWhereInput | ChatWhereInput[]
     OR?: ChatWhereInput[]
     NOT?: ChatWhereInput | ChatWhereInput[]
-    name?: StringFilter<"Chat"> | string
+    name?: StringNullableFilter<"Chat"> | string | null
     created_at?: DateTimeFilter<"Chat"> | Date | string
     updated_at?: DateTimeFilter<"Chat"> | Date | string
     users?: UserListRelationFilter
@@ -4732,7 +4732,7 @@ export namespace Prisma {
 
   export type ChatOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: ChatCountOrderByAggregateInput
@@ -4745,7 +4745,7 @@ export namespace Prisma {
     OR?: ChatScalarWhereWithAggregatesInput[]
     NOT?: ChatScalarWhereWithAggregatesInput | ChatScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Chat"> | string
-    name?: StringWithAggregatesFilter<"Chat"> | string
+    name?: StringNullableWithAggregatesFilter<"Chat"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Chat"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Chat"> | Date | string
   }
@@ -4914,7 +4914,7 @@ export namespace Prisma {
 
   export type ChatCreateInput = {
     id?: string
-    name: string
+    name?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     users?: UserCreateNestedManyWithoutChatsInput
@@ -4923,7 +4923,7 @@ export namespace Prisma {
 
   export type ChatUncheckedCreateInput = {
     id?: string
-    name: string
+    name?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutChatsInput
@@ -4932,7 +4932,7 @@ export namespace Prisma {
 
   export type ChatUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutChatsNestedInput
@@ -4941,7 +4941,7 @@ export namespace Prisma {
 
   export type ChatUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutChatsNestedInput
@@ -4950,21 +4950,21 @@ export namespace Prisma {
 
   export type ChatCreateManyInput = {
     id?: string
-    name: string
+    name?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
 
   export type ChatUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChatUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5628,7 +5628,7 @@ export namespace Prisma {
 
   export type ChatCreateWithoutUsersInput = {
     id?: string
-    name: string
+    name?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     messages?: MessageCreateNestedManyWithoutChatInput
@@ -5636,7 +5636,7 @@ export namespace Prisma {
 
   export type ChatUncheckedCreateWithoutUsersInput = {
     id?: string
-    name: string
+    name?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     messages?: MessageUncheckedCreateNestedManyWithoutChatInput
@@ -5696,7 +5696,7 @@ export namespace Prisma {
     OR?: ChatScalarWhereInput[]
     NOT?: ChatScalarWhereInput | ChatScalarWhereInput[]
     id?: StringFilter<"Chat"> | string
-    name?: StringFilter<"Chat"> | string
+    name?: StringNullableFilter<"Chat"> | string | null
     created_at?: DateTimeFilter<"Chat"> | Date | string
     updated_at?: DateTimeFilter<"Chat"> | Date | string
   }
@@ -5843,7 +5843,7 @@ export namespace Prisma {
 
   export type ChatCreateWithoutMessagesInput = {
     id?: string
-    name: string
+    name?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     users?: UserCreateNestedManyWithoutChatsInput
@@ -5851,7 +5851,7 @@ export namespace Prisma {
 
   export type ChatUncheckedCreateWithoutMessagesInput = {
     id?: string
-    name: string
+    name?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutChatsInput
@@ -5914,7 +5914,7 @@ export namespace Prisma {
 
   export type ChatUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutChatsNestedInput
@@ -5922,7 +5922,7 @@ export namespace Prisma {
 
   export type ChatUncheckedUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutChatsNestedInput
@@ -5962,7 +5962,7 @@ export namespace Prisma {
 
   export type ChatUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUpdateManyWithoutChatNestedInput
@@ -5970,7 +5970,7 @@ export namespace Prisma {
 
   export type ChatUncheckedUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutChatNestedInput
@@ -5978,7 +5978,7 @@ export namespace Prisma {
 
   export type ChatUncheckedUpdateManyWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

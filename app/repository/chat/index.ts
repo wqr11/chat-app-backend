@@ -1,25 +1,47 @@
 import { prisma } from "@/db/index.js";
 
 export class ChatRepository {
-  static async createChat({ name, email }: { name: string; email: string }) {
+  static async createChat({ name, userId }: { name?: string; userId: string }) {
     const chat = await prisma.chat.create({
       data: {
         name,
         users: {
           connect: {
-            email,
+            id: userId,
           },
         },
+      },
+      include: {
+        users: true,
       },
     });
     return chat;
   }
-  static async findChatsForUser({ email }: { email: string }) {
+  static async findChatsForUser({ userId }: { userId: string }) {
     const chats = await prisma.chat.findMany({
       where: {
         users: {
           some: {
-            email,
+            id: userId,
+          },
+        },
+      },
+      include: {
+        messages: {
+          include: {
+            author: {
+              omit: {
+                password: true,
+              },
+            },
+          },
+          omit: {
+            authorId: true,
+          },
+        },
+        users: {
+          omit: {
+            password: true,
           },
         },
       },
@@ -34,36 +56,12 @@ export class ChatRepository {
     });
     return chat;
   }
-  static async patchChat({
-    name,
-    chatId,
-    email,
-  }: {
-    name: string;
-    chatId: string;
-    email: string;
-  }) {
-    const chat = await prisma.chat.update({
-      where: {
-        id: chatId,
-        users: {
-          some: {
-            email,
-          },
-        },
-      },
-      data: {
-        name,
-      },
-    });
-    return chat;
-  }
   static async getChatMessages({
     chatId,
-    email,
+    userId,
   }: {
     chatId: string;
-    email: string;
+    userId: string;
   }) {
     const chats = await prisma.message.findMany({
       where: {
@@ -71,7 +69,7 @@ export class ChatRepository {
           id: chatId,
           users: {
             some: {
-              email,
+              id: userId,
             },
           },
         },

@@ -2,7 +2,7 @@ import { prisma } from "@/db/index.js";
 import { Role, User } from "@/generated/prisma/index.js";
 
 export class AuthRepository {
-  static async checkIfuserEmailExists(email: string) {
+  static async checkIfUserEmailExists(email: string) {
     const user = await prisma.user.findUnique({
       where: {
         email,
@@ -16,6 +16,14 @@ export class AuthRepository {
     return await prisma.user.findUnique({
       where: {
         email,
+      },
+    });
+  }
+
+  static async findUserById(userId: string) {
+    return await prisma.user.findUnique({
+      where: {
+        id: userId,
       },
     });
   }

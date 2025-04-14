@@ -2,21 +2,21 @@ import { redis } from "@/db/index.js";
 import { JWT_ACCESS_EX } from "@/config/index.js";
 
 export class RedisUtils {
-  static async setEmailToken({
-    email,
+  static async setUserIdToken({
+    userId,
     token,
   }: {
-    email: string;
+    userId: string;
     token: string;
   }) {
-    return await redis.set(email, token, {
+    return await redis.set(userId, token, {
       EX: JWT_ACCESS_EX,
     });
   }
-  static async deleteEmailToken({ email }: { email: string }) {
-    return await redis.del(email);
+  static async deleteUserIdToken({ userId }: { userId: string }) {
+    return await redis.del(userId);
   }
-  static async getEmailToken({ email }: { email: string }) {
-    return await redis.get(email);
+  static async getUserIdToken({ userId }: { userId: string }) {
+    return await redis.get(userId);
   }
 }

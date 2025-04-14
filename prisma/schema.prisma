@@ -38,7 +38,7 @@ model User {
 
 model Chat {
   id         String    @id @unique @default(cuid())
-  name       String
+  name       String?
   users      User[]
   messages   Message[]
   created_at DateTime  @default(now())
