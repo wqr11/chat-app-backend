@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { redis } from "@/db/index.js";
 import { AuthRepository } from "@/repository/auth/index.js";
 import { EncryptionUtils } from "@/utils/encryption.js";
 import { JWTUtils } from "@/utils/jwt.js";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/config/index.js";
 import { CookiesUtils } from "@/utils/cookies.js";
 import { AuthenticationError } from "@/types/errors.js";
+import { RedisUtils } from "@/utils/redis.js";
+import { refreshTokens } from "@/services/auth/refreshTokens.js";
 
 export const authMiddleware = async (
   req: Request,
@@ -31,48 +32,28 @@ export const authMiddleware = async (
       accessData = null;
     }
 
-    const activeToken = accessData && (await redis.get(accessData.email));
+    const activeToken =
+      accessData &&
+      (await RedisUtils.getEmailToken({ email: accessData.email }));
 
     if (!accessData || accessToken !== activeToken) {
-      let refreshData: { email: string; password: string };
+      const result = await refreshTokens({ refreshToken });
 
-      try {
-        refreshData = JWTUtils.verifyRefreshToken(refreshToken);
-      } catch {
-        next(new AuthenticationError("Invalid refresh token"));
+      if (!result.success) {
+        next(result.error);
         return;
       }
 
-      const user = await AuthRepository.findUserByEmail(refreshData.email);
-
-      if (!user) {
-        next(new AuthenticationError("No such user"));
-      }
-
-      const passwordsAlign = await EncryptionUtils.compareHash({
-        plain: refreshData.password,
-        encrypted: user!.password,
+      await RedisUtils.setEmailToken({
+        email: result.data.email,
+        token: result.data.access,
       });
-
-      if (!passwordsAlign) {
-        next(new AuthenticationError("Passwords mismatch"));
-      }
-
-      const newAccessToken = JWTUtils.signAccessToken({
-        email: refreshData.email,
-      });
-      const newRefreshToken = JWTUtils.signRefreshToken({
-        email: refreshData.email,
-        password: refreshData.password,
-      });
-
-      await redis.set(user!.email, newAccessToken);
 
       CookiesUtils.setTokenCookies({
         res,
         next,
-        access: newAccessToken,
-        refresh: newRefreshToken,
+        access: result.data.access,
+        refresh: result.data.refresh,
       });
     }
 

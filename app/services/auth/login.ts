@@ -1,5 +1,3 @@
-import { JWT_ACCESS_EX } from "@/config/index.js";
-import { redis } from "@/db/index.js";
 import { AuthRepository } from "@/repository/auth/index.js";
 import {
   AuthEmailPasswordSchema,
@@ -8,6 +6,7 @@ import {
 import { LoginServiceResult } from "@/types/index.js";
 import { EncryptionUtils } from "@/utils/encryption.js";
 import { JWTUtils } from "@/utils/jwt.js";
+import { RedisUtils } from "@/utils/redis.js";
 
 export const login = async (
   body: AuthEmailPasswordType
@@ -51,9 +50,7 @@ export const login = async (
     const accessToken = JWTUtils.signAccessToken({ email });
     const refreshToken = JWTUtils.signRefreshToken({ email, password });
 
-    await redis.set(email, accessToken, {
-      EX: JWT_ACCESS_EX,
-    });
+    await RedisUtils.setEmailToken({ email, token: accessToken });
 
     return {
       success: true,

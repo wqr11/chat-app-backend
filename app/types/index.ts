@@ -17,3 +17,17 @@ export type LoginServiceResult = { code: number } & (
       error: unknown;
     }
 );
+
+export type RefreshTokensResult =
+  | {
+      success: true;
+      data: {
+        email: string;
+        access: string;
+        refresh: string;
+      };
+    }
+  | {
+      success: false;
+      error: unknown;
+    };
