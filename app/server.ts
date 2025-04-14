@@ -18,7 +18,7 @@ const wss = new WebSocketServer({
   port: WS_PORT,
 });
 
-wss.on("connection", (ws, req) => wsConnectionHandler({ ws, req, wss }));
+wss.on("connection", (ws, req) => wsConnectionHandler({ ws, req }));
 
 app.use(cookieParser());
 app.use(express.json());

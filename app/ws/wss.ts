@@ -4,15 +4,16 @@ import { IncomingMessage } from "http";
 import { wsMessageHandler } from "@/ws/handlers/message.js";
 import { wsAuthentication } from "@/ws/handlers/auth.js";
 import { wsOpenHandler } from "@/ws/handlers/open.js";
+import { WsConnection } from "@/ws/types/connection.js";
+
+const wsConnections: Map<string, WsConnection> = new Map();
 
 export const wsConnectionHandler = async ({
   ws,
   req,
-  wss,
 }: {
   ws: WebSocket;
   req: IncomingMessage;
-  wss: Server<typeof WebSocket, typeof IncomingMessage>;
 }) => {
   const auth = await wsAuthentication(ws, req);
 
@@ -22,9 +23,21 @@ export const wsConnectionHandler = async ({
 
   const { userId } = auth;
 
-  await wsOpenHandler({ ws, userId });
+  await wsOpenHandler({ ws, userId, wsConnections });
 
-  ws.on("message", (message) =>
-    wsMessageHandler({ ws, userId, message, req, wss })
-  );
+  const wsBroadcastMessage = ({
+    chatId,
+    message,
+  }: {
+    chatId: string;
+    message: string;
+  }) => {
+    wsConnections.forEach((connection) => {
+      if (connection.chatIds.includes(chatId)) {
+        connection.ws.send(message);
+      }
+    });
+  };
+
+  ws.on("message", (message) => wsMessageHandler({ ws, userId, message }));
 };

@@ -1,5 +1,5 @@
 import { ChatRepository } from "@/repository/chat/index.js";
-import { WsServiceResult } from "@/ws/types/index.js";
+import { WsServiceResult } from "@/ws/types/service.js";
 
 export const getChats = async ({
   userId,

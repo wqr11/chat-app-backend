@@ -16,6 +16,16 @@ export class MessageRepository {
         authorId: userId,
         chatId,
       },
+      include: {
+        author: {
+          omit: {
+            password: true,
+          },
+        },
+      },
+      omit: {
+        authorId: true,
+      },
     });
   }
   static async deleteMessage({ messageId }: { messageId: string }) {

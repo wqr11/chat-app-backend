@@ -1,5 +1,5 @@
 import { MessageRepository } from "@/repository/message/index.js";
-import { WsServiceResult } from "@/ws/types/index.js";
+import { WsServiceResult } from "@/ws/types/service.js";
 
 export const createMessage = async ({
   content,

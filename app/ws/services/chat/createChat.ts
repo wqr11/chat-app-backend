@@ -1,5 +1,5 @@
 import { ChatRepository } from "@/repository/chat/index.js";
-import { ServiceResult } from "@/http/types/service.js";
+import { WsServiceResult } from "@/ws/types/service.js";
 
 export const createChat = async ({
   name,
@@ -7,7 +7,7 @@ export const createChat = async ({
 }: {
   name?: string;
   userId: string;
-}): Promise<ServiceResult> => {
+}): Promise<WsServiceResult> => {
   try {
     const chat = await ChatRepository.createChat({
       name,
@@ -16,14 +16,12 @@ export const createChat = async ({
 
     return {
       success: true,
-      code: 201,
       data: chat,
     };
-  } catch (err) {
+  } catch (error) {
     return {
       success: false,
-      code: 500,
-      data: err,
+      error,
     };
   }
 };

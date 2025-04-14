@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ReceivedMessageSchema = z
+export const WsReceivedMessageSchema = z
   .object({
     event: z.enum(["CREATE", "DELETE"]),
     object: z.enum(["CHAT", "MESSAGE"]),
@@ -58,5 +58,3 @@ export const ReceivedMessageSchema = z
         break;
     }
   });
-
-export type ReceivedMessageType = z.infer<typeof ReceivedMessageSchema>;
