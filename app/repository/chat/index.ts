@@ -82,15 +82,54 @@ export class ChatRepository {
     return chats;
   }
 
-  static async findChatsByName({ search }: { search?: string }) {
+  static async findAvailableChatsByName({
+    search,
+    userId,
+  }: {
+    search?: string;
+    userId: string;
+  }) {
     return await prisma.chat.findMany({
-      ...(search && {
-        where: {
-          name: {
-            contains: search,
+      where: {
+        users: {
+          none: {
+            id: userId,
           },
         },
-      }),
+        ...(search && {
+          AND: {
+            name: {
+              contains: search,
+            },
+          },
+        }),
+      },
+    });
+  }
+
+  static async addUserToChat({
+    userId,
+    chatId,
+  }: {
+    userId: string;
+    chatId: string;
+  }) {
+    return await prisma.chat.update({
+      data: {
+        users: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+      where: {
+        id: chatId,
+        users: {
+          none: {
+            id: userId,
+          },
+        },
+      },
     });
   }
 }

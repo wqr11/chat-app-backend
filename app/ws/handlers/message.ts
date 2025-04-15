@@ -5,7 +5,8 @@ import { createMessage } from "@/ws/services/message/createMessage.js";
 import { deleteMessage } from "@/ws/services/message/deleteMessage.js";
 import { WsBroadcastFunction, WsSentMessage } from "@/ws/types/message.js";
 import { WsConnections } from "@/ws/types/connection.js";
-import { findChatsByName } from "@/ws/services/chat/findChatsByName.js";
+import { addUserToChat } from "../services/chat/addUserToChat.js";
+import { findAvailableChatsByName } from "../services/chat/findAvailableChatsByName.js";
 
 export const wsMessageHandler = async ({
   ws,
@@ -144,7 +145,10 @@ export const wsMessageHandler = async ({
       case "SEARCH":
         switch (object) {
           case "CHAT":
-            const foundChats = await findChatsByName({ search: chat?.name });
+            const foundChats = await findAvailableChatsByName({
+              search: chat?.name,
+              userId,
+            });
 
             if (!foundChats.success) {
               sentMessage = {
@@ -161,6 +165,35 @@ export const wsMessageHandler = async ({
               event: "CREATE",
               object: "SEARCH_CHATS",
               data: foundChats.data,
+            };
+
+            wsSendMessage();
+            break;
+        }
+        break;
+      case "JOIN":
+        switch (object) {
+          case "CHAT":
+            const joinedChat = await addUserToChat({
+              chatId: chat!.id!,
+              userId,
+            });
+
+            if (!joinedChat.success) {
+              sentMessage = {
+                status: "ERROR",
+                error: joinedChat.error,
+              };
+
+              wsSendMessage();
+              break;
+            }
+
+            sentMessage = {
+              status: "OK",
+              event: "CREATE",
+              object: "CHAT",
+              data: joinedChat.data,
             };
 
             wsSendMessage();
