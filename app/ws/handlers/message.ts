@@ -5,6 +5,7 @@ import { createMessage } from "@/ws/services/message/createMessage.js";
 import { deleteMessage } from "@/ws/services/message/deleteMessage.js";
 import { WsBroadcastFunction, WsSentMessage } from "@/ws/types/message.js";
 import { WsConnections } from "@/ws/types/connection.js";
+import { findChatsByName } from "@/ws/services/chat/findChatsByName.js";
 
 export const wsMessageHandler = async ({
   ws,
@@ -139,6 +140,33 @@ export const wsMessageHandler = async ({
             });
             break;
         }
+        break;
+      case "SEARCH":
+        switch (object) {
+          case "CHAT":
+            const foundChats = await findChatsByName({ search: chat?.name });
+
+            if (!foundChats.success) {
+              sentMessage = {
+                status: "ERROR",
+                error: foundChats.error,
+              };
+
+              wsSendMessage();
+              break;
+            }
+
+            sentMessage = {
+              status: "OK",
+              event: "CREATE",
+              object: "SEARCH_CHATS",
+              data: foundChats.data,
+            };
+
+            wsSendMessage();
+            break;
+        }
+        break;
     }
   } catch (error) {
     sentMessage = {

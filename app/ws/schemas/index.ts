@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const WsReceivedMessageSchema = z
   .object({
-    event: z.enum(["CREATE", "DELETE"]),
+    event: z.enum(["CREATE", "DELETE", "SEARCH"]),
     object: z.enum(["CHAT", "MESSAGE"]),
     chat: z
       .object({
@@ -51,6 +51,19 @@ export const WsReceivedMessageSchema = z
                 code: "custom",
                 path: ["message", "id"],
                 message: "Missing field: message.id",
+              });
+            }
+            break;
+        }
+        break;
+      case "SEARCH":
+        switch (object) {
+          case "MESSAGE":
+            if (!message?.content) {
+              ctx.addIssue({
+                code: "custom",
+                path: ["message", "content"],
+                message: "Missing search field: message.content",
               });
             }
             break;

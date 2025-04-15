@@ -81,4 +81,16 @@ export class ChatRepository {
     });
     return chats;
   }
+
+  static async findChatsByName({ search }: { search?: string }) {
+    return await prisma.chat.findMany({
+      ...(search && {
+        where: {
+          name: {
+            contains: search,
+          },
+        },
+      }),
+    });
+  }
 }
