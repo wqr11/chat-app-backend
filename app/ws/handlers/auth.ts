@@ -44,6 +44,7 @@ export const wsAuthentication = async (
     return {
       success: true,
       userId,
+      token: accessToken,
     };
   } catch (error) {
     ws.close(3000, "Authorization Error: AccessToken is NOT valid");

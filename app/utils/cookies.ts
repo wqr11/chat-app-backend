@@ -1,7 +1,6 @@
 import { NextFunction, Response } from "express";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/config/index.js";
 import { SetCookiesError } from "@/http/types/errors.js";
-import { JWTUtils } from "./jwt.js";
 
 export class CookiesUtils {
   static setTokenCookies({
@@ -27,10 +26,5 @@ export class CookiesUtils {
     } catch {
       next(new SetCookiesError("Unable to set cookies"));
     }
-  }
-  static getEmailFromCookies({ cookies }: { cookies: Record<string, any> }) {
-    const token = cookies[ACCESS_TOKEN_COOKIE];
-    const { email } = JWTUtils.verifyAccessToken(token);
-    return email;
   }
 }

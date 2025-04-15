@@ -4,6 +4,7 @@ import { IncomingMessage } from "http";
 import { wsMessageHandler } from "@/ws/handlers/message.js";
 import { wsAuthentication } from "@/ws/handlers/auth.js";
 import { wsOpenHandler } from "@/ws/handlers/open.js";
+import { wsPingHandler } from "@/ws/handlers/ping.js";
 import { WsConnections } from "@/ws/types/connection.js";
 
 const wsConnections: WsConnections = new Map();
@@ -21,9 +22,11 @@ export const wsConnectionHandler = async ({
     return;
   }
 
-  const { userId } = auth;
+  const { userId, token } = auth;
 
   await wsOpenHandler({ ws, userId, wsConnections });
+
+  await wsPingHandler({ ws, userId, token });
 
   const wsBroadcastMessage = ({
     chatId,
@@ -44,6 +47,10 @@ export const wsConnectionHandler = async ({
   );
 
   ws.on("close", () => {
+    wsConnections.delete(userId);
+  });
+
+  ws.on("error", () => {
     wsConnections.delete(userId);
   });
 };

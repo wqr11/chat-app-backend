@@ -12,3 +12,5 @@ export const ACCESS_TOKEN_COOKIE = process.env.ACCESS_TOKEN_COOKIE!;
 export const REFRESH_TOKEN_COOKIE = process.env.REFRESH_TOKEN_COOKIE!;
 
 export const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS!);
+
+export const WS_PING_INTERVAL = parseInt(process.env.WS_PING_INTERVAL!); // in ms;

@@ -13,9 +13,11 @@ export class RedisUtils {
       EX: JWT_ACCESS_EX,
     });
   }
+
   static async deleteUserIdToken({ userId }: { userId: string }) {
     return await redis.del(userId);
   }
+
   static async getUserIdToken({ userId }: { userId: string }) {
     return await redis.get(userId);
   }
