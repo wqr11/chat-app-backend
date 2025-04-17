@@ -29,16 +29,19 @@ export class AuthRepository {
   }
 
   static async createUser({
+    name,
     email,
     password,
     role,
   }: {
+    name: string;
     email: string;
     password: string;
     role?: Role;
   }) {
     const user = await prisma.user.create({
       data: {
+        name,
         email,
         password,
         ...(role && {

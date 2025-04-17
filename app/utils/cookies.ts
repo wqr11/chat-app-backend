@@ -1,5 +1,10 @@
 import { NextFunction, Response } from "express";
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/config/index.js";
+import {
+  ACCESS_TOKEN_COOKIE,
+  JWT_ACCESS_EX,
+  JWT_REFRESH_EX,
+  REFRESH_TOKEN_COOKIE,
+} from "@/config/index.js";
 import { SetCookiesError } from "@/http/types/errors.js";
 
 export class CookiesUtils {
@@ -16,12 +21,10 @@ export class CookiesUtils {
   }) {
     try {
       res.cookie(ACCESS_TOKEN_COOKIE, access, {
-        httpOnly: true,
-        sameSite: "lax",
+        maxAge: JWT_ACCESS_EX * 1000,
       });
       res.cookie(REFRESH_TOKEN_COOKIE, refresh, {
-        httpOnly: true,
-        sameSite: "lax",
+        maxAge: JWT_REFRESH_EX * 1000,
       });
     } catch {
       next(new SetCookiesError("Unable to set cookies"));

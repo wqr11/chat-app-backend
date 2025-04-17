@@ -17,6 +17,7 @@ export class ChatRepository {
             password: true,
           },
         },
+        messages: true,
       },
     });
     return chat;

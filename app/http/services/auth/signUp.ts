@@ -1,15 +1,12 @@
 import { AuthRepository } from "@/repository/auth/index.js";
-import {
-  AuthEmailPasswordSchema,
-  AuthEmailPasswordType,
-} from "@/http/schemas/auth.js";
+import { SignUpSchema, SignUpSchemaType } from "@/http/schemas/auth.js";
 import { ServiceResult } from "@/http/types/service.js";
 import { EncryptionUtils } from "@/utils/encryption.js";
 
 export const signUp = async (
-  body: AuthEmailPasswordType
+  body: SignUpSchemaType
 ): Promise<ServiceResult> => {
-  const parsed = await AuthEmailPasswordSchema.safeParseAsync(body);
+  const parsed = await SignUpSchema.safeParseAsync(body);
 
   if (!parsed.success) {
     return {
@@ -19,7 +16,7 @@ export const signUp = async (
     };
   }
 
-  const { email, password } = parsed.data;
+  const { name, email, password } = parsed.data;
 
   const userExists = await AuthRepository.checkIfUserEmailExists(email);
 
@@ -35,6 +32,7 @@ export const signUp = async (
 
   try {
     const createdUser = await AuthRepository.createUser({
+      name,
       email,
       password: encryptedPassword,
     });

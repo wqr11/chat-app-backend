@@ -2,6 +2,7 @@ import express from "express";
 import { WebSocketServer } from "ws";
 import { wsConnectionHandler } from "@/ws/wss.js";
 
+import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import { loggerMiddleware } from "@/http/middleware/logger.js";
@@ -21,6 +22,14 @@ const wss = new WebSocketServer({
 });
 
 wss.on("connection", (ws, req) => wsConnectionHandler({ ws, req }));
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    exposedHeaders: "Set-Cookie",
+  })
+);
 
 app.use(cookieParser());
 app.use(express.json());

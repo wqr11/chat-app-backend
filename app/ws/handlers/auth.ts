@@ -2,28 +2,30 @@ import { WebSocket } from "ws";
 import { IncomingMessage } from "http";
 import { JWTUtils } from "@/utils/jwt.js";
 import { RedisUtils } from "@/utils/redis.js";
+import { ACCESS_TOKEN_COOKIE } from "@/config/index.js";
 import { WebSocketAuthenticationResult } from "@/ws/types/auth.js";
 
 export const wsAuthentication = async (
   ws: WebSocket,
   req: IncomingMessage
 ): Promise<WebSocketAuthenticationResult> => {
-  const headers = req.headers;
-
-  if (!headers.authorization) {
-    ws.close(3000, "Authorization Error: AccessToken is NOT valid");
-    return {
-      success: false,
-    };
+  const cookies: Record<string, string> = {};
+  if (req.headers.cookie) {
+    req.headers.cookie.split(";").forEach((cookie) => {
+      const parts = cookie.split("=");
+      const name = parts[0].trim();
+      const value = parts[1].trim();
+      cookies[name] = value;
+    });
   }
 
-  const [accessType, accessToken] = headers.authorization?.split(" ") as [
-    string,
-    string
-  ];
+  const accessCookie = cookies[ACCESS_TOKEN_COOKIE];
+  const accessHeader = req.headers.authorization?.split(" ")[1];
 
-  if (accessType !== "Bearer") {
-    ws.close(3000, "Authorization Error: AccessToken is NOT valid");
+  const accessToken = accessCookie ?? accessHeader;
+
+  if (!accessToken) {
+    ws.close(3000, "Authorization Error: No AccessToken cookie present");
     return {
       success: false,
     };

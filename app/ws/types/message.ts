@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { WsReceivedMessageSchema } from "@/ws/schemas/index.js";
-import { IChat, IMessage } from "@/ws/types/db.js";
+import { IChat, IMessage, IUser } from "@/ws/types/db.js";
 
 type WsSentMessageGenericFields = {
   status: "OK";
-  event: "CREATE" | "DELETE";
+  event: "CREATE" | "DELETE" | "INITIALIZE";
 };
 
 type WsSentMessageObjectFiedls =
@@ -15,6 +15,10 @@ type WsSentMessageObjectFiedls =
   | {
       object: "MESSAGE";
       data: IMessage[];
+    }
+  | {
+      object: "USER";
+      data: IUser;
     };
 
 type WsSentMessageErrorFields = {

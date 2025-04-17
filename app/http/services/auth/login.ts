@@ -1,17 +1,14 @@
 import { AuthRepository } from "@/repository/auth/index.js";
-import {
-  AuthEmailPasswordSchema,
-  AuthEmailPasswordType,
-} from "@/http/schemas/auth.js";
+import { LoginSchema, LoginSchemaType } from "@/http/schemas/auth.js";
 import { LoginServiceResult } from "@/http/types/service.js";
 import { EncryptionUtils } from "@/utils/encryption.js";
 import { JWTUtils } from "@/utils/jwt.js";
 import { RedisUtils } from "@/utils/redis.js";
 
 export const login = async (
-  body: AuthEmailPasswordType
+  body: LoginSchemaType
 ): Promise<LoginServiceResult> => {
-  const parsed = await AuthEmailPasswordSchema.safeParseAsync(body);
+  const parsed = await LoginSchema.safeParseAsync(body);
 
   if (!parsed.success) {
     return {

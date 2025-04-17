@@ -193,7 +193,7 @@ export const wsMessageHandler = async ({
               status: "OK",
               event: "CREATE",
               object: "CHAT",
-              data: joinedChat.data,
+              data: [joinedChat.data],
             };
 
             wsSendMessage();

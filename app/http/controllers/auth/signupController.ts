@@ -10,7 +10,7 @@ export const signUpController = async (req: Request, res: Response) => {
   res.status(data.code).json({
     ...(data.success
       ? {
-          data: data.data,
+          ...data.data,
         }
       : {
           error: data.data,
